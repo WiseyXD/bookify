@@ -8,6 +8,8 @@ import {
 	signInWithPopup,
 	onAuthStateChanged,
 } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDIAOlyxq7JBzZaa-jWcFfgTPlbSsZVjg4",
@@ -23,14 +25,18 @@ const FirebaseContext = createContext(null);
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const Gprovider = new GoogleAuthProvider();
-
+const db = getFirestore(app);
+const storage = getStorage(app);
 export const useFirebase = () => useContext(FirebaseContext);
 
 export const FirebaseProvider = (props) => {
 	const signUpWithEmailAndPassword = (email, password) =>
 		createUserWithEmailAndPassword(auth, email, password);
+
 	const loginWithEmailAndPassword = (email, password) =>
 		signInWithEmailAndPassword(auth, email, password);
+
+	const addBook = (name, desc, price, isbn, author) => {};
 
 	const [user, setUser] = useState(null);
 
@@ -41,7 +47,9 @@ export const FirebaseProvider = (props) => {
 			return user;
 		});
 	}, [user]);
+
 	const isLoggedin = user ? true : false;
+
 	const googleSignIn = () => signInWithPopup(auth, Gprovider);
 	return (
 		<FirebaseContext.Provider
@@ -50,6 +58,7 @@ export const FirebaseProvider = (props) => {
 				loginWithEmailAndPassword,
 				googleSignIn,
 				isLoggedin,
+				addBook,
 			}}
 		>
 			{props.children}
