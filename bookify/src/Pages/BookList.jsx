@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
+import { useFirebase } from "../Context/Firebase";
 export default function BookList() {
 	const [isbn, setIsbn] = useState(null);
 	const [price, setPrice] = useState(null);
 	const [book, setBook] = useState("");
 	const [author, setAuthor] = useState("");
-	const [category, setCategory] = useState("");
+
 	const [desc, setDesc] = useState("");
+	const [cover, setCover] = useState("");
+	const firebase = useFirebase();
+
+	async function handleSubmit(e) {
+		e.preventDefault();
+		console.log("Hi");
+		await firebase.addBook(book, desc, price, isbn, author, cover);
+	}
 	return (
 		<div>
 			<section className="bg-white dark:bg-gray-900 min-h-screen">
@@ -13,7 +22,7 @@ export default function BookList() {
 					<h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
 						Add a new product
 					</h2>
-					<form action="#">
+					<form onSubmit={handleSubmit}>
 						<div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
 							<div className="sm:col-span-2">
 								<label
@@ -76,9 +85,6 @@ export default function BookList() {
 								<select
 									id="category"
 									className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-									onChange={(e) =>
-										setCategory(e.target.value)
-									}
 								>
 									<option selected="">Select category</option>
 									<option value="TV">Horror</option>
@@ -101,6 +107,25 @@ export default function BookList() {
 									className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 									placeholder="12"
 									onChange={(e) => setIsbn(e.target.value)}
+									required
+								/>
+							</div>
+							<div className="">
+								<label
+									htmlFor="image"
+									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+								>
+									Image
+								</label>
+								<input
+									type="file"
+									name="item-weight"
+									id="item-weight"
+									className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+									placeholder="12"
+									onChange={(e) =>
+										setCover(e.target.files[0])
+									}
 									required
 								/>
 							</div>

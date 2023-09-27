@@ -8,8 +8,8 @@ import {
 	signInWithPopup,
 	onAuthStateChanged,
 } from "firebase/auth";
-import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDIAOlyxq7JBzZaa-jWcFfgTPlbSsZVjg4",
@@ -30,14 +30,6 @@ const storage = getStorage(app);
 export const useFirebase = () => useContext(FirebaseContext);
 
 export const FirebaseProvider = (props) => {
-	const signUpWithEmailAndPassword = (email, password) =>
-		createUserWithEmailAndPassword(auth, email, password);
-
-	const loginWithEmailAndPassword = (email, password) =>
-		signInWithEmailAndPassword(auth, email, password);
-
-	const addBook = (name, desc, price, isbn, author) => {};
-
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
@@ -47,7 +39,34 @@ export const FirebaseProvider = (props) => {
 			return user;
 		});
 	}, [user]);
+	const signUpWithEmailAndPassword = (email, password) =>
+		createUserWithEmailAndPassword(auth, email, password);
 
+	const loginWithEmailAndPassword = (email, password) =>
+		signInWithEmailAndPassword(auth, email, password);
+
+	const addBook = async (name, desc, price, isbn, author, cover) => {
+		const imgRef = ref(
+			storage,
+			`uploads/images/${Date.now()}-${cover.name}`
+		);
+		const uploadResult = await uploadBytes(imgRef, cover);
+		return await addDoc(collection(db, "books"), {
+			name,
+			desc,
+			price,
+			isbn,
+			author,
+			Image: uploadResult.ref.fullPath,
+			displayName: user.displayName,
+			email: user.email,
+			photoURL: user.photoURL,
+		});
+	};
+
+	const readBooks = async () => {
+		return await getDocs(collection(db, "books"));
+	};
 	const isLoggedin = user ? true : false;
 
 	const googleSignIn = () => signInWithPopup(auth, Gprovider);
@@ -59,6 +78,7 @@ export const FirebaseProvider = (props) => {
 				googleSignIn,
 				isLoggedin,
 				addBook,
+				readBooks,
 			}}
 		>
 			{props.children}
