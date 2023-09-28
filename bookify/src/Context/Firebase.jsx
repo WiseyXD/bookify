@@ -72,6 +72,17 @@ export const FirebaseProvider = (props) => {
 		});
 	};
 
+	const placeOrder = async (id, qty) => {
+		const collectionRef = collection(db, "books", id, "orders");
+		const res = await addDoc(collectionRef, {
+			displayName: user.displayName,
+			email: user.email,
+			photoURL: user.photoURL,
+			qty,
+		});
+		return res;
+	};
+
 	const getImageURL = (path) => {
 		return getDownloadURL(ref(storage, path));
 	};
@@ -99,6 +110,7 @@ export const FirebaseProvider = (props) => {
 				readBooks,
 				getImageURL,
 				getBookByID,
+				placeOrder,
 			}}
 		>
 			{props.children}

@@ -6,6 +6,7 @@ export default function DetailsPage() {
 	const params = useParams();
 	const [data, setData] = useState(null);
 	const [url, setURL] = useState(null);
+	const [qty, setQty] = useState(1);
 	useEffect(() => {
 		firebase.getBookByID(params.id).then((val) => setData(val.data()));
 	}, []);
@@ -16,6 +17,10 @@ export default function DetailsPage() {
 	}, [data]);
 	console.log(url);
 	console.log(data);
+
+	function handleOrder() {
+		firebase.placeOrder(params.id, qty);
+	}
 
 	return (
 		<div className="max-w-full w-3/4 mx-auto py-8">
@@ -30,8 +35,20 @@ export default function DetailsPage() {
 						<p className="text-lg">{data.author}</p>
 					</div>
 					<p className="">{data.desc}</p>
-					<p>{data.price}</p>
-					<button className="bg-green-400 px-3 py-2 rounded-md hover:bg-green-300 ease-in-out duration-150">
+					<p>{data.price} Rupees</p>
+					<input
+						className="border border-black"
+						type="number"
+						name=""
+						id=""
+						value={qty}
+						min={1}
+						onChange={(e) => setQty(e.target.value)}
+					/>
+					<button
+						className="bg-green-400 px-3 py-2 rounded-md hover:bg-green-300 ease-in-out duration-150"
+						onClick={handleOrder}
+					>
 						Buy Now
 					</button>
 				</div>
