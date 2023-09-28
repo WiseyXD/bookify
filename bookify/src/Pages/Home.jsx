@@ -8,6 +8,7 @@ export default function Home() {
 	useEffect(() => {
 		firebase.readBooks().then((doc) => setBooks(doc.docs));
 	}, []);
+
 	console.log(books);
 	return (
 		<div className="max-w-full w-3/4 mx-auto">

@@ -8,7 +8,7 @@ import {
 	signInWithPopup,
 	onAuthStateChanged,
 } from "firebase/auth";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -50,6 +50,7 @@ export const FirebaseProvider = (props) => {
 			storage,
 			`uploads/images/${Date.now()}-${cover.name}`
 		);
+
 		const uploadResult = await uploadBytes(imgRef, cover);
 		return await addDoc(collection(db, "books"), {
 			name,
@@ -62,6 +63,10 @@ export const FirebaseProvider = (props) => {
 			email: user.email,
 			photoURL: user.photoURL,
 		});
+	};
+
+	const getImageURL = (path) => {
+		getDownloadURL(ref(storage, path));
 	};
 
 	const readBooks = async () => {
@@ -79,6 +84,7 @@ export const FirebaseProvider = (props) => {
 				isLoggedin,
 				addBook,
 				readBooks,
+				getImageURL,
 			}}
 		>
 			{props.children}
