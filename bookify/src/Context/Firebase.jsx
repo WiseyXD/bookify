@@ -9,7 +9,14 @@ import {
 	onAuthStateChanged,
 } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import {
+	getFirestore,
+	collection,
+	addDoc,
+	getDocs,
+	getDoc,
+	doc,
+} from "firebase/firestore";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDIAOlyxq7JBzZaa-jWcFfgTPlbSsZVjg4",
@@ -66,7 +73,13 @@ export const FirebaseProvider = (props) => {
 	};
 
 	const getImageURL = (path) => {
-		getDownloadURL(ref(storage, path));
+		return getDownloadURL(ref(storage, path));
+	};
+
+	const getBookByID = async (id) => {
+		const docRef = doc(db, "books", id);
+		const res = await getDoc(docRef);
+		return res;
 	};
 
 	const readBooks = async () => {
@@ -85,6 +98,7 @@ export const FirebaseProvider = (props) => {
 				addBook,
 				readBooks,
 				getImageURL,
+				getBookByID,
 			}}
 		>
 			{props.children}

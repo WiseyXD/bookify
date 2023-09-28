@@ -7,6 +7,7 @@ import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import BookList from "./Pages/BookList";
+import DetailsPage from "./Pages/DetailsPage";
 function App() {
 	const [count, setCount] = useState(0);
 	return (
@@ -16,6 +17,7 @@ function App() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/add" element={<BookList />} />
+				<Route path="/view/book/:id" element={<DetailsPage />} />
 			</Routes>
 		</>
 	);

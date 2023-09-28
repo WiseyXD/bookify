@@ -13,7 +13,7 @@ export default function Home() {
 	return (
 		<div className="max-w-full w-3/4 mx-auto">
 			{books.map((book, i) => {
-				return <BookCard {...book.data()} key={i} />;
+				return <BookCard {...book.data()} key={book.id} id={book.id} />;
 			})}
 		</div>
 	);
