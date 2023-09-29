@@ -17,7 +17,7 @@ import {
 	getDoc,
 	doc,
 } from "firebase/firestore";
-
+// JAi Shree Ra,
 const firebaseConfig = {
 	apiKey: "AIzaSyDIAOlyxq7JBzZaa-jWcFfgTPlbSsZVjg4",
 	authDomain: "rauth-57f25.firebaseapp.com",
