@@ -16,8 +16,10 @@ import {
 	getDocs,
 	getDoc,
 	doc,
+	query,
+	where,
 } from "firebase/firestore";
-// JAi Shree Ra,
+// JAi Shree Ram.
 const firebaseConfig = {
 	apiKey: "AIzaSyDIAOlyxq7JBzZaa-jWcFfgTPlbSsZVjg4",
 	authDomain: "rauth-57f25.firebaseapp.com",
@@ -78,8 +80,15 @@ export const FirebaseProvider = (props) => {
 			displayName: user.displayName,
 			email: user.email,
 			photoURL: user.photoURL,
-			qty,
+			qty: Number(qty),
 		});
+		return res;
+	};
+
+	const fetchMyBooks = async () => {
+		const collectionRef = collection(db, "books");
+		const q = query(collectionRef, where("userID", "==", user.uid));
+		const res = await getDocs(q);
 		return res;
 	};
 
@@ -111,6 +120,7 @@ export const FirebaseProvider = (props) => {
 				getImageURL,
 				getBookByID,
 				placeOrder,
+				fetchMyBooks,
 			}}
 		>
 			{props.children}

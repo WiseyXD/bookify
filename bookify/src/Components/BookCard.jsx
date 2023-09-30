@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { useFirebase } from "../Context/Firebase";
 import { useNavigate } from "react-router-dom";
-export default function BookCard({ name, price, desc, Image, photoURL, id }) {
+export default function BookCard({
+	name,
+	price,
+	desc,
+	Image,
+	photoURL,
+	id,
+	link,
+}) {
 	const firebase = useFirebase();
 	const navigate = useNavigate();
 	const [url, setUrl] = useState(null);
@@ -27,7 +35,7 @@ export default function BookCard({ name, price, desc, Image, photoURL, id }) {
 						{desc}
 					</p>
 					<button
-						onClick={(e) => navigate(`/view/book/${id}`)}
+						onClick={(e) => navigate(link)}
 						className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					>
 						{price}
